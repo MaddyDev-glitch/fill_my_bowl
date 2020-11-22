@@ -6,12 +6,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geodesy/geodesy.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class MapUtils {
+var filterConstraint = 2;
 
+class MapUtils {
   MapUtils._();
 
   static Future<void> openMap(double latitude, double longitude) async {
-    String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+    String googleUrl =
+        'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
     if (await canLaunch(googleUrl)) {
       await launch(googleUrl);
     } else {
@@ -27,39 +29,34 @@ bool gotLocation = false;
 List<Widget> list = new List();
 final _firestore = FirebaseFirestore.instance;
 
-int getDistance(double lat1,double lon1,double lat2,double lon2)
-{
+int getDistance(double lat1, double lon1, double lat2, double lon2) {
   LatLng userpos = LatLng(lat1, lon1);
   LatLng tagpos = LatLng(lat2, lon2);
-  num distance = geodesy.distanceBetweenTwoGeoPoints(userpos,tagpos);
-  num distinKM =distance/1000;
-  distinKM=distinKM.toInt();
+  num distance = geodesy.distanceBetweenTwoGeoPoints(userpos, tagpos);
+  num distinKM = distance / 1000;
+  distinKM = distinKM.toInt();
   print("OVER HERE");
   print(distinKM);
-return distinKM;
+  return distinKM;
 }
 
 class GotSupply extends StatefulWidget {
+  double lat;
+  double lon;
+  GotSupply(this.lat, this.lon);
+
   @override
   _GotSupplyState createState() => _GotSupplyState();
 }
 
 class _GotSupplyState extends State<GotSupply> {
-  Future getLocation() async {
-    print('hello');
-    Location location = Location();
-    await location.getLocation();
-    currentLatitude = location.latitude;
-    currentLongitude = location.longitude;
-    print(currentLongitude);
-    print(currentLatitude);
-    gotLocation = true;
-  }
-
   @override
   void initState() {
-    getLocation();
+    // getLocation();
+    currentLatitude = widget.lat;
+    currentLongitude = widget.lon;
     super.initState();
+    filterConstraint = 2;
     // myContent = new TextEditingController(text: null);
   }
 
@@ -87,6 +84,45 @@ class _GotSupplyState extends State<GotSupply> {
             SizedBox(
               height: 10,
             ),
+            Text("Filter Options",
+                style: TextStyle(fontSize: 18, color: Colors.white)),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                    decoration: BoxDecoration(color: Colors.amber,borderRadius: BorderRadius.circular(25)),
+                    child: FlatButton(
+                        onPressed: () {
+                          setState(() {
+                            filterConstraint = 2;
+                          });
+                        },
+                        child: Text("2 Km",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),))),
+                Container(
+                    decoration: BoxDecoration(color: Colors.amber,borderRadius: BorderRadius.circular(25)),
+                    child: FlatButton(
+                        onPressed: () {
+                          setState(() {
+                            filterConstraint = 5;
+                          });
+                        },
+                        child: Text("5 Km",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500)))),
+                Container(
+                    decoration: BoxDecoration(color: Colors.amber,borderRadius: BorderRadius.circular(25)),
+                    child: FlatButton(onPressed: () {
+                      setState(() {
+                        filterConstraint = 10;
+
+                      });
+                    }, child: Text("10 Km",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500)))),
+              ],
+            ),
+            SizedBox(
+              height: 15,
+            ),
             Container(
               child: StreamBuilder<QuerySnapshot>(
                   stream: _firestore.collection('spot').snapshots(),
@@ -98,12 +134,18 @@ class _GotSupplyState extends State<GotSupply> {
                       for (var message in messages) {
                         final imgtemp = message.data();
                         print("----------=========== ${imgtemp}");
+                        var templat = imgtemp['lat'];
+                        var templon = imgtemp['lon'];
+                        var tempdist = getDistance(currentLatitude,
+                            currentLongitude, templat, templon);
                         final messagewidget = MessageBubble(
                           desc: imgtemp['desc'],
                           lat: imgtemp['lat'],
                           lon: imgtemp['lon'],
                         );
-                        messagewidgets.add(messagewidget);
+                        if (tempdist <= filterConstraint) {
+                          messagewidgets.add(messagewidget);
+                        }
                       }
                     }
                     return Expanded(
@@ -113,17 +155,6 @@ class _GotSupplyState extends State<GotSupply> {
                     );
                   }),
             ),
-            // FloatingActionButton(
-            //     child: Text("+",
-            //         style: TextStyle(fontSize: 30, fontWeight: FontWeight.w300)),
-            //     onPressed: () {
-            //       setState(() {
-            //         // Navigator.push(
-            //         //   context,
-            //         //   MaterialPageRoute(builder: (context) => CreateBlog()),
-            //         // );
-            //       });
-            //     }),
           ],
         ),
       ),
@@ -164,15 +195,24 @@ class MessageBubble extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 10, bottom: 15),
                 child: Row(
                   children: [
-                    Text("Distance: ", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),),
                     Text(
-                      getDistance(currentLatitude, currentLongitude, lat, lon).toString(),
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
+                      "Distance:",
+                      style:
+                          TextStyle(fontSize: 23, fontWeight: FontWeight.w300),
                     ),
-                    SizedBox(width: 50,),
-                    FlatButton(onPressed: (){
-                      MapUtils.openMap(lat,lon);
-                    }, child: Text("OPEN MAPS"))
+                    Text(
+                      "${getDistance(currentLatitude, currentLongitude, lat, lon).toString()} Km",
+                      style:
+                          TextStyle(fontSize: 27, fontWeight: FontWeight.w300),
+                    ),
+                    SizedBox(
+                      width: 50,
+                    ),
+                    FlatButton(
+                        onPressed: () {
+                          MapUtils.openMap(lat, lon);
+                        },
+                        child: Text("OPEN in MAPS",style: TextStyle(fontSize: 15),))
                   ],
                 ),
               ),

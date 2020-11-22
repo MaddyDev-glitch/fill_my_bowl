@@ -1,5 +1,6 @@
 import 'package:fillmybowl1/LoginPage.dart';
 import 'package:fillmybowl1/gotsupply.dart';
+import 'package:fillmybowl1/homePage.dart';
 import 'package:fillmybowl1/spotted.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: GotSupply(), //CHANGE TESTER  1. LoginPage() 2.Spotted() 3. GotSupply()
+      home: LoginPage(), //CHANGE TESTER  1. LoginPage() 2.Spotted() 3. GotSupply()
     );
         }}

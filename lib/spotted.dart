@@ -12,15 +12,20 @@ bool gotLocation=false;
 final _firestoresend = FirebaseFirestore.instance;
 
 class Spotted extends StatefulWidget {
+  double lat;
+  double lon;
+  Spotted(this.lat,this.lon);
   @override
   _SpottedState createState() => _SpottedState();
 }
 
 class _SpottedState extends State<Spotted> {
+
   @override
   void initState() {
-
-    getLocation();
+    currentLatitude=widget.lat;
+    currentLongitude=widget.lon;
+    // getLocation();
     KeyboardVisibility.onChange.listen((bool visible) {
       setState(() {
         coverHeight = visible ? 170 : 350;
@@ -28,7 +33,8 @@ class _SpottedState extends State<Spotted> {
       });
     });
     super.initState();
-
+print(currentLongitude);
+print(currentLatitude);
     // myContent = new TextEditingController(text: null);
   }
 
@@ -119,16 +125,6 @@ class _SpottedState extends State<Spotted> {
     );
   }
 
-  Future getLocation() async {
-    print('hello');
-    Location location = Location();
-    location.getLocation();
-    currentLatitude = location.latitude;
-    currentLongitude = location.longitude;
-    print(currentLongitude);
-    print(currentLatitude);
-    gotLocation=true;
-  }
 
   final mydesc = TextEditingController();
   @override
@@ -238,7 +234,7 @@ class _SpottedState extends State<Spotted> {
                 onPressed: () {
 
                   setState(() {
-                    if(gotLocation==true && mydesc.text!="")
+                    if(mydesc.text!="" && currentLatitude!=null && currentLongitude!=null)
                       {
                         _firestoresend
                             .collection("spot").add({"lat": currentLatitude, "lon": currentLongitude,"desc":mydesc.text});

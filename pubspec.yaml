@@ -37,6 +37,7 @@ dependencies:
   cloud_firestore: ^0.14.3
   geodesy: ^0.3.2
   url_launcher: ^5.7.10
+  delayed_display: ^1.1.0
 
 
 
@@ -58,6 +59,14 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - images/
+
+  fonts:
+    - family: DancingScript
+      fonts:
+        - asset: fonts/DancingScript.ttf
+    - family: SourceSansPro
+      fonts:
+        - asset: fonts/SourceSansPro-Regular.ttf
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

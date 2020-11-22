@@ -1,8 +1,8 @@
+import 'package:fillmybowl1/homePage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -75,13 +75,13 @@ class _LoginPageState extends State<LoginPage> {
         {
           print("LoggedIn");
           onLoginStatusChanged(true);
-          // Navigator.of(context).push(
-          //   MaterialPageRoute(
-          //     builder: (context) {
-          //       return Testing("");
-          //     },
-          //   ),
-          // );
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) {
+                return HomePage();
+              },
+            ),
+          );
           break;
         }
     }
@@ -112,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   // FlutterLogo(size: 150),
-                  Image(image: AssetImage("images/logo.png"), height: 210.0),
+                  Image(image: AssetImage("images/logomain.png"), height: 210.0),
                   Text(
                     'Fill My Bowl',
                     style: TextStyle(
@@ -163,13 +163,13 @@ class _LoginPageState extends State<LoginPage> {
       onPressed: () async {
         signInWithGoogle().then((result) {
           if (result != null) {
-            // Navigator.of(context).push(
-            //   MaterialPageRoute(
-            //     builder: (context) {
-            //       return Testing(det);
-            //     },
-            //   ),
-            // );
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) {
+                  return HomePage();
+                },
+              ),
+            );
           }
         });
       },
