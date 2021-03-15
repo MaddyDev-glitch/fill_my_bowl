@@ -7,7 +7,7 @@ import 'package:geodesy/geodesy.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 var filterConstraint = 2;
-
+String showConstraint ="spot";
 class MapUtils {
   MapUtils._();
 
@@ -120,12 +120,47 @@ class _GotSupplyState extends State<GotSupply> {
                     }, child: Text("10 Km",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500)))),
               ],
             ),
+            SizedBox(height: 5,),
+            Text("Locate Options",
+                style: TextStyle(fontSize: 18, color: Colors.white)),
+            SizedBox(height: 10,),
+            Padding(
+              padding: const EdgeInsets.only(left: 60,right: 60),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                      decoration: BoxDecoration(color: Colors.amber,borderRadius: BorderRadius.circular(25)),
+                      child: FlatButton(
+                          onPressed: () {
+                            setState(() {
+                              showConstraint="spot";
+                              List<MessageBubble> messagewidgets = [];
+
+                            });
+                          },
+                          child: Text("People",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),))),
+                  Container(
+                      decoration: BoxDecoration(color: Colors.amber,borderRadius: BorderRadius.circular(25)),
+                      child: FlatButton(
+                          onPressed: () {
+                            setState(() {
+                              showConstraint="spotFridge";
+                              List<MessageBubble> messagewidgets = [];
+
+                            });
+                          },
+                          child: Text("Fridges",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500)))),
+
+                ],
+              ),
+            ),
             SizedBox(
               height: 15,
             ),
             Container(
               child: StreamBuilder<QuerySnapshot>(
-                  stream: _firestore.collection('spot').snapshots(),
+                  stream: _firestore.collection(showConstraint).snapshots(),
                   builder: (context, snapshot) {
                     List<MessageBubble> messagewidgets = [];
                     if (snapshot.hasData) {
@@ -203,7 +238,7 @@ class MessageBubble extends StatelessWidget {
                     Text(
                       "${getDistance(currentLatitude, currentLongitude, lat, lon).toString()} Km",
                       style:
-                          TextStyle(fontSize: 27, fontWeight: FontWeight.w300),
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.w300),
                     ),
                     SizedBox(
                       width: 50,

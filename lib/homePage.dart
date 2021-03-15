@@ -2,9 +2,11 @@ import 'package:fillmybowl1/abtpage.dart';
 import 'package:fillmybowl1/gotsupply.dart';
 import 'package:fillmybowl1/location.dart';
 import 'package:fillmybowl1/spotted.dart';
+import 'package:fillmybowl1/spotted_cold.dart';
 import 'package:flutter/material.dart';
 import 'package:delayed_display/delayed_display.dart';
 import 'package:flutter/widgets.dart';
+
 
 double currentLatitude;
 double currentLongitude;
@@ -45,6 +47,42 @@ class _HomePageState extends State<HomePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FlatButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: ()async{
+                        await getLocation();
+                        setState(() {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return SpottedCold(currentLatitude, currentLongitude);
+                              },
+                            ),
+                          );
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.blueAccent),
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Spotted Fridge",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w300),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
+
+
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: FlatButton(
