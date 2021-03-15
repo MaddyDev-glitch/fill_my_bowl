@@ -4,6 +4,7 @@ class UrlOpen{
 
   UrlOpen._();
 
+  
   static Future<void> openLink(String URL) async {
     String gitUrlp = '$URL';
     if (await canLaunch(gitUrlp)) {
