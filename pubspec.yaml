@@ -39,6 +39,7 @@ dependencies:
   url_launcher: ^5.7.10
   delayed_display: ^1.1.0
   flutter_spinkit: ^4.1.2
+  timeago: ^2.0.30
 
 
 

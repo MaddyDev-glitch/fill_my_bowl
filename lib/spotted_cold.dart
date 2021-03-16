@@ -261,7 +261,7 @@ class _SpottedColdState extends State<SpottedCold> {
                         if(mydesc.text!="" && currentLatitude!=null && currentLongitude!=null)
                         {
                           _firestoresend
-                              .collection("spotFridge").add({"lat": currentLatitude, "lon": currentLongitude,"desc":mydesc.text});
+                              .collection("spotFridge").add({"lat": currentLatitude, "lon": currentLongitude,"desc":mydesc.text,"time":DateTime.now()});
                           mydesc.clear();
                           _showConfirm();
                         }

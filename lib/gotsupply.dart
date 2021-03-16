@@ -5,9 +5,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geodesy/geodesy.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 var filterConstraint = 2;
-String showConstraint ="spot";
+String timeagomsg;
+String showConstraint = "spot";
+bool timeconstraint;
+double _currentSliderValue = 2;
+Color loc1=Colors.amber;
+Color loc2=Colors.grey.shade700;
+Color text1 = Colors.black;
+Color text2 = Colors.amber;
 class MapUtils {
   MapUtils._();
 
@@ -84,76 +92,111 @@ class _GotSupplyState extends State<GotSupply> {
             SizedBox(
               height: 10,
             ),
-            Text("Filter Options",
+            Text("Filter By Distance",
                 style: TextStyle(fontSize: 18, color: Colors.white)),
             SizedBox(
               height: 10,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                    decoration: BoxDecoration(color: Colors.amber,borderRadius: BorderRadius.circular(25)),
-                    child: FlatButton(
-                        onPressed: () {
-                          setState(() {
-                            filterConstraint = 2;
-                          });
-                        },
-                        child: Text("2 Km",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),))),
-                Container(
-                    decoration: BoxDecoration(color: Colors.amber,borderRadius: BorderRadius.circular(25)),
-                    child: FlatButton(
-                        onPressed: () {
-                          setState(() {
-                            filterConstraint = 5;
-                          });
-                        },
-                        child: Text("5 Km",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500)))),
-                Container(
-                    decoration: BoxDecoration(color: Colors.amber,borderRadius: BorderRadius.circular(25)),
-                    child: FlatButton(onPressed: () {
-                      setState(() {
-                        filterConstraint = 10;
 
-                      });
-                    }, child: Text("10 Km",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500)))),
-              ],
+            SliderTheme(
+              data: SliderTheme.of(context).copyWith(
+                trackHeight: 2.0,
+                thumbColor: Colors.red,
+                thumbShape: RoundSliderThumbShape(enabledThumbRadius: 12.0),
+                overlayColor: Colors.purple.withAlpha(32),
+                overlayShape: RoundSliderOverlayShape(overlayRadius: 20.0),
+              ),
+              child: Slider(
+                activeColor: Colors.amber.shade700,
+                  inactiveColor: Colors.amberAccent.shade100,
+                  value: _currentSliderValue,
+                  min: 1,
+                  max: 20,
+                  divisions: 50,
+                  label: _currentSliderValue.round().toString(),
+                  onChanged: (double value) {
+                    setState(() {
+                      _currentSliderValue = value;
+                      filterConstraint=value.round();
+                      if(filterConstraint==20)
+                        {
+                          filterConstraint==300;
+                        }
+                    });
+                  }),
             ),
-            SizedBox(height: 5,),
+
+
+            SizedBox(
+              height: 5,
+            ),
             Text("Locate Options",
                 style: TextStyle(fontSize: 18, color: Colors.white)),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             Padding(
-              padding: const EdgeInsets.only(left: 60,right: 60),
+              padding: const EdgeInsets.only(left: 60, right: 60),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                      decoration: BoxDecoration(color: Colors.amber,borderRadius: BorderRadius.circular(25)),
+                      decoration: BoxDecoration(
+                          color: loc1,
+                          borderRadius: BorderRadius.circular(25)),
                       child: FlatButton(
                           onPressed: () {
                             setState(() {
-                              showConstraint="spot";
+                              showConstraint = "spot";
                               List<MessageBubble> messagewidgets = [];
-
+                              loc2=Colors.grey.shade900;
+                              loc1=Colors.amber;
+                              text1=Colors.black;
+                              text2=Colors.amber;
                             });
                           },
-                          child: Text("People",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),))),
+                          child: Text(
+                            "People",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.w500,color: text1),
+                          ))),
                   Container(
-                      decoration: BoxDecoration(color: Colors.amber,borderRadius: BorderRadius.circular(25)),
+                      decoration: BoxDecoration(
+                          color: loc2,
+                          borderRadius: BorderRadius.circular(25)),
                       child: FlatButton(
                           onPressed: () {
                             setState(() {
-                              showConstraint="spotFridge";
+                              showConstraint = "spotFridge";
                               List<MessageBubble> messagewidgets = [];
-
+                              loc1=Colors.grey.shade900;
+                              loc2=Colors.amber;
+                              text2=Colors.black;
+                              text1=Colors.amber;
                             });
                           },
-                          child: Text("Fridges",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500)))),
-
+                          child: Text("Fridges",
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w500,color: text2)))),
                 ],
               ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.0),
+              child: Container(
+                  height: 1.0,
+                  width: MediaQuery.of(context).size.width,
+                  color: Colors.white),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              "Showing the data recieved in past 24 hours",
+              style: TextStyle(color: Colors.white),
             ),
             SizedBox(
               height: 15,
@@ -171,14 +214,29 @@ class _GotSupplyState extends State<GotSupply> {
                         print("----------=========== ${imgtemp}");
                         var templat = imgtemp['lat'];
                         var templon = imgtemp['lon'];
+                        Timestamp posttime = imgtemp['time'];
+                        int posttimeint = posttime.millisecondsSinceEpoch;
+                        int currenttimeint =
+                            DateTime.now().millisecondsSinceEpoch;
+                        // int posttimeint=DateTime.now().subtract(Duration(days: 1)).millisecondsSinceEpoch;
+                        // int currenttimeint=DateTime.now().millisecondsSinceEpoch;
+                        int xyz = currenttimeint - posttimeint;
+                        print("$currenttimeint - $posttimeint ==  $xyz");
+                        if (xyz > 86400000 + 100)
+                          timeconstraint = true;
+                        else
+                          timeconstraint = false;
                         var tempdist = getDistance(currentLatitude,
                             currentLongitude, templat, templon);
+                        timeagomsg = timeago.format(posttime.toDate());
                         final messagewidget = MessageBubble(
                           desc: imgtemp['desc'],
                           lat: imgtemp['lat'],
                           lon: imgtemp['lon'],
+                          time: timeagomsg,
                         );
-                        if (tempdist <= filterConstraint) {
+                        if (tempdist <= filterConstraint &&
+                            timeconstraint == false) {
                           messagewidgets.add(messagewidget);
                         }
                       }
@@ -201,8 +259,9 @@ class MessageBubble extends StatelessWidget {
   final String desc;
   final double lat;
   final double lon;
+  final String time;
 
-  MessageBubble({this.desc, this.lat, this.lon});
+  MessageBubble({this.desc, this.lat, this.lon, this.time});
 
   @override
   Widget build(BuildContext context) {
@@ -220,8 +279,18 @@ class MessageBubble extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 10, top: 15),
                 child: Text(
                   desc,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: true,
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300),
                 ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Text("Posted $time"),
               ),
               SizedBox(
                 height: 20,
@@ -247,7 +316,10 @@ class MessageBubble extends StatelessWidget {
                         onPressed: () {
                           MapUtils.openMap(lat, lon);
                         },
-                        child: Text("OPEN in MAPS",style: TextStyle(fontSize: 15),))
+                        child: Text(
+                          "OPEN in MAPS",
+                          style: TextStyle(fontSize: 15),
+                        ))
                   ],
                 ),
               ),

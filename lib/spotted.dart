@@ -23,6 +23,12 @@ class _SpottedState extends State<Spotted> {
 
   @override
   void initState() {
+    // var posttime= DateTime.now().subtract(Duration(days: 1));
+    // var posttime2= DateTime.now().add(Duration(days: 1));
+    // var t3=DateTime.now().isAfter(posttime2);
+    // print("$t3");
+    // print(new DateTime.now().millisecondsSinceEpoch);
+
     currentLatitude=widget.lat;
     currentLongitude=widget.lon;
     // getLocation();
@@ -237,7 +243,7 @@ print(currentLatitude);
                     if(mydesc.text!="" && currentLatitude!=null && currentLongitude!=null)
                       {
                         _firestoresend
-                            .collection("spot").add({"lat": currentLatitude, "lon": currentLongitude,"desc":mydesc.text});
+                            .collection("spot").add({"lat": currentLatitude, "lon": currentLongitude,"desc":mydesc.text,"time":DateTime.now()});
                         mydesc.clear();
                         _showConfirm();
                       }
