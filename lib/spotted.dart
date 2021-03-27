@@ -10,6 +10,7 @@ double currentLatitude;
 double currentLongitude;
 bool gotLocation=false;
 final _firestoresend = FirebaseFirestore.instance;
+const pastel_blue = const Color(0xffC0EAEF);
 
 class Spotted extends StatefulWidget {
   double lat;

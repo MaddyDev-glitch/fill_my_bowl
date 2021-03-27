@@ -155,7 +155,7 @@ class _SpottedColdState extends State<SpottedCold> {
                         height: coverHeight,
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                              image: AssetImage('images/cold3.jpg'),
+                              image: AssetImage('images/cold3.png'),
                               fit: BoxFit.cover),
                           borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(20),

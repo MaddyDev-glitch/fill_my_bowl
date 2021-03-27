@@ -4,7 +4,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
+User user;
+Prefusername(String name) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setString('prefusername',name);
+}
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn googleSignIn = GoogleSignIn();
 final fbLogin = FacebookLogin();
@@ -25,7 +30,7 @@ Future<String> signInWithGoogle() async {
 
   final UserCredential authResult =
   await _auth.signInWithCredential(credential);
-  final User user = authResult.user;
+  user = authResult.user;
 
   if (user != null) {
     assert(!user.isAnonymous);
@@ -35,7 +40,9 @@ Future<String> signInWithGoogle() async {
     assert(user.uid == currentUser.uid);
 
     print('signInWithGoogle succeeded: ${user}');
-    det = user.displayName;
+    det = await user.displayName;
+    print(det);
+    Prefusername(det);
     return '${user.displayName}';
   }
 
@@ -55,37 +62,37 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   //====================================================================
-  void initiateFacebookLogin() async {
-    var facebookLogin = FacebookLogin();
-    var facebookLoginResult =
-    // await facebookLogin.logInWithReadPermissions(['name']);
-    await facebookLogin.logIn(["email"]);
-    print(facebookLoginResult.errorMessage);
-    print(facebookLoginResult.accessToken);
-    switch (facebookLoginResult.status) {
-      case FacebookLoginStatus.error:
-        print("Error");
-        onLoginStatusChanged(false);
-        break;
-      case FacebookLoginStatus.cancelledByUser:
-        print("CancelledByUser");
-        onLoginStatusChanged(false);
-        break;
-      case FacebookLoginStatus.loggedIn:
-        {
-          print("LoggedIn");
-          onLoginStatusChanged(true);
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) {
-                return HomePage();
-              },
-            ),
-          );
-          break;
-        }
-    }
-  }
+  // void initiateFacebookLogin() async {
+  //   var facebookLogin = FacebookLogin();
+  //   var facebookLoginResult =
+  //   // await facebookLogin.logInWithReadPermissions(['name']);
+  //   await facebookLogin.logIn(["email"]);
+  //   print(facebookLoginResult.errorMessage);
+  //   print(facebookLoginResult.accessToken);
+  //   switch (facebookLoginResult.status) {
+  //     case FacebookLoginStatus.error:
+  //       print("Error");
+  //       onLoginStatusChanged(false);
+  //       break;
+  //     case FacebookLoginStatus.cancelledByUser:
+  //       print("CancelledByUser");
+  //       onLoginStatusChanged(false);
+  //       break;
+  //     case FacebookLoginStatus.loggedIn:
+  //       {
+  //         print("LoggedIn");
+  //         onLoginStatusChanged(true);
+  //         Navigator.of(context).push(
+  //           MaterialPageRoute(
+  //             builder: (context) {
+  //               return HomePage();
+  //             },
+  //           ),
+  //         );
+  //         break;
+  //       }
+  //   }
+  // }
 
   void onLoginStatusChanged(bool isLoggedIn) {
     setState(() {
@@ -134,24 +141,24 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: Container(
-                child: Center(
-                  child: loggedIn
-                      ? Text("Logged In! :)",
-                      style: TextStyle(color: Colors.white, fontSize: 40))
-                      : Stack(
-                    children: <Widget>[
-                      Container(
-                        child: Center(
-                          child: _facebookLoginButton(),
-                        ),
-                      )
-                    ],
-                  ),
-                )),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.only(top: 20),
+          //   child: Container(
+          //       child: Center(
+          //         child: loggedIn
+          //             ? Text("Logged In! :)",
+          //             style: TextStyle(color: Colors.white, fontSize: 40))
+          //             : Stack(
+          //           children: <Widget>[
+          //             Container(
+          //               child: Center(
+          //                 child: _facebookLoginButton(),
+          //               ),
+          //             )
+          //           ],
+          //         ),
+          //       )),
+          // ),
         ],
       ),
     );
@@ -199,35 +206,35 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  OutlineButton _facebookLoginButton() {
-    return OutlineButton(
-      splashColor: Colors.blue,
-      onPressed: () {
-        initiateFacebookLogin();
-      },
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-      highlightElevation: 0,
-      borderSide: BorderSide(color: Colors.blue),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image(image: AssetImage("images/fbiconbig.png"), height: 40.0),
-            Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: Text(
-                'Sign in with Facebook',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.grey,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  // OutlineButton _facebookLoginButton() {
+  //   return OutlineButton(
+  //     splashColor: Colors.blue,
+  //     onPressed: () {
+  //       initiateFacebookLogin();
+  //     },
+  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+  //     highlightElevation: 0,
+  //     borderSide: BorderSide(color: Colors.blue),
+  //     child: Padding(
+  //       padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+  //       child: Row(
+  //         mainAxisSize: MainAxisSize.min,
+  //         mainAxisAlignment: MainAxisAlignment.center,
+  //         children: <Widget>[
+  //           Image(image: AssetImage("images/fbiconbig.png"), height: 40.0),
+  //           Padding(
+  //             padding: const EdgeInsets.only(left: 10),
+  //             child: Text(
+  //               'Sign in with Facebook',
+  //               style: TextStyle(
+  //                 fontSize: 20,
+  //                 color: Colors.grey,
+  //               ),
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 }

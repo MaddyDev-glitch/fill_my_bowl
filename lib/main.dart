@@ -18,6 +18,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomePage(), //CHANGE TESTER  1. LoginPage() 2.Spotted() 3. GotSupply()
+      home: LoginPage(), //CHANGE TESTER  1. LoginPage() 2.Spotted() 3. GotSupply()
     );
         }}
