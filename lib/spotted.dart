@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fillmybowl1/homePage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -8,20 +9,19 @@ import 'location.dart';
 double coverHeight = 350;
 double currentLatitude;
 double currentLongitude;
-bool gotLocation=false;
+bool gotLocation = false;
 final _firestoresend = FirebaseFirestore.instance;
 const pastel_blue = const Color(0xffC0EAEF);
 
 class Spotted extends StatefulWidget {
   double lat;
   double lon;
-  Spotted(this.lat,this.lon);
+  Spotted(this.lat, this.lon);
   @override
   _SpottedState createState() => _SpottedState();
 }
 
 class _SpottedState extends State<Spotted> {
-
   @override
   void initState() {
     // var posttime= DateTime.now().subtract(Duration(days: 1));
@@ -30,8 +30,8 @@ class _SpottedState extends State<Spotted> {
     // print("$t3");
     // print(new DateTime.now().millisecondsSinceEpoch);
 
-    currentLatitude=widget.lat;
-    currentLongitude=widget.lon;
+    currentLatitude = widget.lat;
+    currentLongitude = widget.lon;
     // getLocation();
     KeyboardVisibility.onChange.listen((bool visible) {
       setState(() {
@@ -40,8 +40,8 @@ class _SpottedState extends State<Spotted> {
       });
     });
     super.initState();
-print(currentLongitude);
-print(currentLatitude);
+    print(currentLongitude);
+    print(currentLatitude);
     // myContent = new TextEditingController(text: null);
   }
 
@@ -52,7 +52,10 @@ print(currentLatitude);
       builder: (BuildContext context) {
         return new AlertDialog(
           backgroundColor: Colors.grey.shade900,
-          title: new Text('Feed My Bowl',style: TextStyle(color: Colors.amber),),
+          title: new Text(
+            'Feed My Bowl',
+            style: TextStyle(color: Colors.amber),
+          ),
           content: new SingleChildScrollView(
             child: new ListBody(
               children: [
@@ -66,13 +69,19 @@ print(currentLatitude);
                 new SizedBox(
                   height: 10,
                 ),
-                new Text('Thank you for helping the community by spotting a needy person :)',style: TextStyle(color: Colors.white),),
+                new Text(
+                  'Thank you for helping the community by spotting a needy person :)',
+                  style: TextStyle(color: Colors.white),
+                ),
               ],
             ),
           ),
           actions: [
             new FlatButton(
-              child: new Text('Okay',style: TextStyle(color: Colors.amber,fontSize: 18),),
+              child: new Text(
+                'Okay',
+                style: TextStyle(color: Colors.amber, fontSize: 18),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -90,8 +99,10 @@ print(currentLatitude);
       builder: (BuildContext context) {
         return new AlertDialog(
           backgroundColor: Colors.grey.shade900,
-
-          title: new Text('Feed My Bowl',style: TextStyle(color: Colors.amber),),
+          title: new Text(
+            'Feed My Bowl',
+            style: TextStyle(color: Colors.amber),
+          ),
           content: new SingleChildScrollView(
             child: new ListBody(
               children: [
@@ -115,13 +126,19 @@ print(currentLatitude);
                 new SizedBox(
                   height: 20,
                 ),
-                new Text('Check if you have filled in the description before submitting\n Check if your location services is enabled',style: TextStyle(color: Colors.white),),
+                new Text(
+                  'Check if you have filled in the description before submitting\n Check if your location services is enabled',
+                  style: TextStyle(color: Colors.white),
+                ),
               ],
             ),
           ),
           actions: [
             new FlatButton(
-              child: new Text('Okay',style: TextStyle(color: Colors.amber,fontSize: 18),),
+              child: new Text(
+                'Okay',
+                style: TextStyle(color: Colors.amber, fontSize: 18),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -132,131 +149,144 @@ print(currentLatitude);
     );
   }
 
-
   final mydesc = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-      backgroundColor: Colors.black54,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Center(
-              child: Stack(
-                children: [
-                  AnimatedContainer(
-                    curve: Curves.easeInOutQuad,
-                    duration: Duration(
-                      milliseconds: 400,
-                    ),
-                    height: coverHeight,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage('images/vector1.jpg'),
-                          fit: BoxFit.cover),
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(20),
-                          bottomRight: Radius.circular(20)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
-                          spreadRadius: 12,
-                          blurRadius: 8,
-                          offset: Offset(0, 5), // changes position of shadow
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: AnimatedContainer(
-                        duration: Duration(milliseconds: 480),
-                        curve: Curves.easeInOutQuad,
-                        padding: EdgeInsets.only(top: coverHeight),
-                        alignment: Alignment.bottomCenter,
-                        child: Text(
-                          "I Spotted a needy person",
-                          style: TextStyle(
-                              fontSize: 40,
-                              color: Color(0xffFAC000),
-                              fontWeight: FontWeight.bold),
-                        )),
-                  )
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 30, bottom: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Description",
-                    style: TextStyle(
-                        fontWeight: FontWeight.w300,
-                        fontSize: 30,
-                        color: Colors.white),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 15, right: 15),
-              child: new TextField(
-                controller: mydesc,
-                style: TextStyle(color: Colors.white, fontSize: 20),
-                maxLines: 5,
-                decoration: new InputDecoration(
-                    border: new OutlineInputBorder(
-                      borderRadius: const BorderRadius.all(
-                        const Radius.circular(30.0),
+        child: WillPopScope(
+      child: Scaffold(
+        backgroundColor: Colors.black54,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Center(
+                child: Stack(
+                  children: [
+                    AnimatedContainer(
+                      curve: Curves.easeInOutQuad,
+                      duration: Duration(
+                        milliseconds: 400,
+                      ),
+                      height: coverHeight,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('images/vector1.jpg'),
+                            fit: BoxFit.cover),
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(20),
+                            bottomRight: Radius.circular(20)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.2),
+                            spreadRadius: 12,
+                            blurRadius: 8,
+                            offset: Offset(0, 5), // changes position of shadow
+                          ),
+                        ],
                       ),
                     ),
-                    filled: true,
-                    hintStyle: new TextStyle(color: Colors.white),
-                    hintText: "Type in your text",
-                    fillColor: Color(0x553E456D)),
-              ),
-            ),
-            SizedBox(
-              height: 50,
-            ),
-            RaisedButton(
-                color: Colors.amber,
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      left: 30, right: 30, top: 12, bottom: 12),
-                  child: Text(
-                    "Notify",
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.w300),
-                  ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: AnimatedContainer(
+                          duration: Duration(milliseconds: 480),
+                          curve: Curves.easeInOutQuad,
+                          padding: EdgeInsets.only(top: coverHeight),
+                          alignment: Alignment.bottomCenter,
+                          child: Text(
+                            "I Spotted a needy person",
+                            style: TextStyle(
+                                fontSize: 40,
+                                color: Color(0xffFAC000),
+                                fontWeight: FontWeight.bold),
+                          )),
+                    )
+                  ],
                 ),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                    side: BorderSide(color: Colors.amberAccent)),
-                onPressed: () {
-
-                  setState(() {
-                    if(mydesc.text!="" && currentLatitude!=null && currentLongitude!=null)
-                      {
-                        _firestoresend
-                            .collection("spot").add({"lat": currentLatitude, "lon": currentLongitude,"desc":mydesc.text,"time":DateTime.now()});
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 30, bottom: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Description",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w300,
+                          fontSize: 30,
+                          color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 15, right: 15),
+                child: new TextField(
+                  controller: mydesc,
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                  maxLines: 5,
+                  decoration: new InputDecoration(
+                      border: new OutlineInputBorder(
+                        borderRadius: const BorderRadius.all(
+                          const Radius.circular(30.0),
+                        ),
+                      ),
+                      filled: true,
+                      hintStyle: new TextStyle(color: Colors.white),
+                      hintText: "Type in your text",
+                      fillColor: Color(0x553E456D)),
+                ),
+              ),
+              SizedBox(
+                height: 50,
+              ),
+              RaisedButton(
+                  color: Colors.amber,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 30, right: 30, top: 12, bottom: 12),
+                    child: Text(
+                      "Notify",
+                      style:
+                          TextStyle(fontSize: 30, fontWeight: FontWeight.w300),
+                    ),
+                  ),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                      side: BorderSide(color: Colors.amberAccent)),
+                  onPressed: () {
+                    setState(() {
+                      if (mydesc.text != "" &&
+                          currentLatitude != null &&
+                          currentLongitude != null) {
+                        _firestoresend.collection("spot").add({
+                          "lat": currentLatitude,
+                          "lon": currentLongitude,
+                          "desc": mydesc.text,
+                          "time": DateTime.now()
+                        });
                         mydesc.clear();
                         _showConfirm();
-                      }
-                    else
-                      {
+                      } else {
                         _showError();
                       }
-                  });
-                })
-          ],
+                    });
+                  })
+            ],
+          ),
         ),
       ),
+      onWillPop: () async {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) {
+              return HomePage();
+            },
+          ),
+        );
+      },
     ));
   }
 }

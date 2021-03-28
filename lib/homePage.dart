@@ -1,15 +1,11 @@
 import 'package:fillmybowl1/abtpage.dart';
-import 'package:fillmybowl1/gotsupply.dart';
+import 'package:fillmybowl1/loading.dart';
 import 'package:fillmybowl1/location.dart';
-import 'package:fillmybowl1/spotted.dart';
-import 'package:fillmybowl1/spotted_cold.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:delayed_display/delayed_display.dart';
 import 'package:flutter/widgets.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fillmybowl1/LoginPage.dart' as login;
-
 String userName = login.user.displayName;
 double currentLatitude;
 double currentLongitude;
@@ -138,12 +134,12 @@ class _HomePageState extends State<HomePage> {
                   FlatButton(
                     padding: EdgeInsets.zero,
                     onPressed: () async {
-                      await getLocation();
+                      // await getLocation();
                       setState(() {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) {
-                              return Spotted(currentLatitude, currentLongitude);
+                              return LoadingPage(1);
                             },
                           ),
                         );
@@ -165,13 +161,12 @@ class _HomePageState extends State<HomePage> {
                   FlatButton(
                     padding: EdgeInsets.zero,
                     onPressed: () async {
-                      await getLocation();
+                      // await getLocation();
                       setState(() {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) {
-                              return SpottedCold(
-                                  currentLatitude, currentLongitude);
+                              return LoadingPage(2);
                             },
                           ),
                         );
@@ -193,13 +188,12 @@ class _HomePageState extends State<HomePage> {
                   FlatButton(
                       padding: EdgeInsets.zero,
                       onPressed: () async {
-                        await getLocation();
+                        // await getLocation();
                         setState(() {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) {
-                                return GotSupply(
-                                    currentLatitude, currentLongitude);
+                                return LoadingPage(3);
                               },
                             ),
                           );

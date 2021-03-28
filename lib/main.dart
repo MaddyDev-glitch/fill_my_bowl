@@ -1,6 +1,7 @@
 import 'package:fillmybowl1/LoginPage.dart';
 import 'package:fillmybowl1/gotsupply.dart';
 import 'package:fillmybowl1/homePage.dart';
+import 'package:fillmybowl1/loading.dart';
 import 'package:fillmybowl1/spotted.dart';
 import 'package:fillmybowl1/spotted_cold.dart';
 import 'package:firebase_core/firebase_core.dart';
