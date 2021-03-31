@@ -1,7 +1,6 @@
 import 'package:fillmybowl1/abtpage.dart';
 import 'package:fillmybowl1/loading.dart';
 import 'package:fillmybowl1/location.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -227,6 +226,7 @@ class _HomePageState extends State<HomePage> {
                       //   ),
                       // ),
                       ),
+                  Text("Do Make sure to turn ON the location services",style: TextStyle(fontWeight: FontWeight.w400,color: Colors.white),)
                 ],
               ),
             ),

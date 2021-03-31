@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 User user;
 Prefusername(String name) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -107,6 +108,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       backgroundColor: Colors.black,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -119,7 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   // FlutterLogo(size: 150),
-                  Image(image: AssetImage("images/logomain.png"), height: 210.0),
+                  Image(image: AssetImage("images/logonew.png"), height: 300.0),
                   Text(
                     'Fill My Bowl',
                     style: TextStyle(
