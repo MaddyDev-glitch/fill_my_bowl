@@ -31,7 +31,7 @@ class AbtPage extends StatelessWidget {
                 Text("Developers",style: TextStyle(fontSize: 35,fontWeight: FontWeight.w200,color: Colors.amber),),
                 SizedBox(height: 20,),
                 CircleAvatar(
-                  backgroundImage: AssetImage('images/maddyimg.PNG'),
+                  backgroundImage: AssetImage('images/maddy1.png'),
                   radius: 50.0,
                 ),
                 Text(
