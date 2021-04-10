@@ -2,6 +2,7 @@ import 'package:fillmybowl1/homePage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,7 +15,6 @@ Prefsetsignin() async {
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn googleSignIn = GoogleSignIn();
-// final fbLogin = FacebookLogin();
 bool isLoggedIn = false;
 var det = "";
 
@@ -57,12 +57,12 @@ void signOutGoogle() async {
   print("User Signed Out");
 }
 
-class LoginPage extends StatefulWidget {
+class AlreadyLoginPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _AlreadyLoginPageState createState() => _AlreadyLoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _AlreadyLoginPageState extends State<AlreadyLoginPage> {
   //====================================================================
   // void initiateFacebookLogin() async {
   //   var facebookLogin = FacebookLogin();
@@ -96,72 +96,74 @@ class _LoginPageState extends State<LoginPage> {
   //   }
   // }
 
-  void onLoginStatusChanged(bool isLoggedIn) {
-    setState(() {
-      isLoggedIn = isLoggedIn;
-    });
-  }
+  // void onLoginStatusChanged(bool isLoggedIn) {
+  //   setState(() {
+  //     isLoggedIn = isLoggedIn;
+  //   });
+  // }
 
   //=====================================================================
   var loggedIn = false;
   var firebaseAuth = FirebaseAuth.instance;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    signInWithGoogle().then((result) {
+      if (result != null) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) {
+              return HomePage();
+            },
+          ),
+        );
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.black54,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            // color: Colors.white,
-            child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  // FlutterLogo(size: 150),
-                  Image(image: AssetImage("images/logonew.png"), height: 300.0),
-                  Text(
-                    'Fill My Bowl',
-                    style: TextStyle(
-                        fontSize: 25,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w300),
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    'Be a part of the process',
-                    style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.grey,
-                        fontWeight: FontWeight.w300),
-                  ),
-                  SizedBox(height: 30),
-                  _googleSignInButton(),
-                ],
-              ),
-            ),
+          Image(image: AssetImage("images/logonew.png"), height: 300.0),
+
+          SizedBox(
+            height: 5,
           ),
-          // Padding(
-          //   padding: const EdgeInsets.only(top: 20),
-          //   child: Container(
-          //       child: Center(
-          //         child: loggedIn
-          //             ? Text("Logged In! :)",
-          //             style: TextStyle(color: Colors.white, fontSize: 40))
-          //             : Stack(
-          //           children: <Widget>[
-          //             Container(
-          //               child: Center(
-          //                 child: _facebookLoginButton(),
-          //               ),
-          //             )
-          //           ],
-          //         ),
-          //       )),
-          // ),
+          Center(
+              child: Text("Loading...",
+                  style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.white))),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Center(
+                child: Text(
+                  "Just a Second",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w300,
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
+                )),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 50),
+            child: Center(
+                child: SpinKitWave(
+                  color: Colors.amberAccent,
+                  size: 50,
+                  itemCount: 5,
+                  type: SpinKitWaveType.start,
+                )),
+          ),
         ],
       ),
     );
@@ -209,35 +211,35 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // OutlineButton _facebookLoginButton() {
-  //   return OutlineButton(
-  //     splashColor: Colors.blue,
-  //     onPressed: () {
-  //       initiateFacebookLogin();
-  //     },
-  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-  //     highlightElevation: 0,
-  //     borderSide: BorderSide(color: Colors.blue),
-  //     child: Padding(
-  //       padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-  //       child: Row(
-  //         mainAxisSize: MainAxisSize.min,
-  //         mainAxisAlignment: MainAxisAlignment.center,
-  //         children: <Widget>[
-  //           Image(image: AssetImage("images/fbiconbig.png"), height: 40.0),
-  //           Padding(
-  //             padding: const EdgeInsets.only(left: 10),
-  //             child: Text(
-  //               'Sign in with Facebook',
-  //               style: TextStyle(
-  //                 fontSize: 20,
-  //                 color: Colors.grey,
-  //               ),
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
+// OutlineButton _facebookLoginButton() {
+//   return OutlineButton(
+//     splashColor: Colors.blue,
+//     onPressed: () {
+//       initiateFacebookLogin();
+//     },
+//     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+//     highlightElevation: 0,
+//     borderSide: BorderSide(color: Colors.blue),
+//     child: Padding(
+//       padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+//       child: Row(
+//         mainAxisSize: MainAxisSize.min,
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: <Widget>[
+//           Image(image: AssetImage("images/fbiconbig.png"), height: 40.0),
+//           Padding(
+//             padding: const EdgeInsets.only(left: 10),
+//             child: Text(
+//               'Sign in with Facebook',
+//               style: TextStyle(
+//                 fontSize: 20,
+//                 color: Colors.grey,
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//     ),
+//   );
+// }
 }
