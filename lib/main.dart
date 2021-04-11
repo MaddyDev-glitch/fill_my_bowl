@@ -18,13 +18,14 @@ CheckloggedIn() async {
     print("true");
   } else {
     already_sign_in = false;
+    print("false");
   }
 }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  CheckloggedIn();
+  await CheckloggedIn();
   runApp(MyApp());
 }
 

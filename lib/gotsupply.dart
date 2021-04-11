@@ -127,6 +127,7 @@ class _GotSupplyState extends State<GotSupply> {
                       });
                     }),
               ),
+              // Text("|            |",style: TextStyle(color: Colors.white),),
               SizedBox(
                 height: 5,
               ),
